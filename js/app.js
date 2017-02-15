@@ -11,8 +11,7 @@ var numero1 = 0
     display = document.querySelector('#display')
     punto = document.getElementById('punto')
     teclas = document.getElementsByClassName('tecla')
-    accion = ""
-    negativo = 0
+    accion = "inicio"
     Operaciones = {operacion: []}
 
 var Calculadora = {
@@ -50,58 +49,114 @@ var Calculadora = {
       display.innerHTML += data.id
     }
   },
+  capturarTecla: function(event){
+    var tecla = event.which || event.keyCode
+    var valorTecla = String.fromCharCode(tecla)
+    var cadena = display.innerHTML.toString()
+    if(valorTecla < 10 && cadena.length < 8){
+      if(display.innerHTML == "-0" || display.innerHTML == "0"){
+        display.innerHTML = ""
+      }
+      display.innerHTML += valorTecla
+    }
+  },
   sumar: function(){
-    if(numero1 == ''){
-      accion = "sumar"
-      numero1 = Number(display.innerHTML)
+    if(accion == "inicio"){accion = "sumar"}
+    if(accion != "sumar"){
+      numero1 = resultado
       display.innerHTML = ''
+      accion = "sumar"
     }else{
-      numero2 = Number(display.innerHTML)
-      resultado = numero1 + numero2;
-      display.innerHTML = resultado.toString().substring(0,8)
-      this.agregarOperacion(resultado)
+      if(numero1 == ''){
+        numero1 = Number(display.innerHTML)
+        display.innerHTML = ''
+      }else{
+        if(display.innerHTML == resultado){
+          numero1 = Number(display.innerHTML)
+          numero2 = numero2
+        }else{
+          numero2 = Number(display.innerHTML)
+        }
+        resultado = numero1 + numero2;
+        display.innerHTML = this.validarDisplay(resultado)
+        this.agregarOperacion(resultado)
+      }
     }
   },
   restar: function(){
-    if(numero1 == ''){
-      accion = "restar"
-      numero1 = Number(display.innerHTML)
+    if(accion == "inicio"){accion = "restar"}
+    if(accion != "restar"){
+      numero1 = resultado
       display.innerHTML = ''
+      accion = "restar"
     }else{
-      numero2 = Number(display.innerHTML)
-      resultado = numero1 - numero2;
-      display.innerHTML = resultado.toString().substring(0,8)
-      this.agregarOperacion(resultado)
+      if(numero1 == ''){
+        numero1 = Number(display.innerHTML)
+        display.innerHTML = ''
+      }else{
+        if(display.innerHTML == resultado){
+          numero1 = Number(display.innerHTML)
+          numero2 = numero2
+        }else{
+          numero2 = Number(display.innerHTML)
+        }
+        resultado = numero1 - numero2;
+        display.innerHTML = this.validarDisplay(resultado)
+        this.agregarOperacion(resultado)
+      }
     }
   },
   multiplicar: function(){
-    if(numero1 == ''){
-      accion = "multiplicar"
-      numero1 = Number(display.innerHTML)
+    if(accion == "inicio"){accion = "multiplicar"}
+    if(accion != "multiplicar"){
+      numero1 = resultado
       display.innerHTML = ''
+      accion = "multiplicar"
     }else{
-      numero2 = Number(display.innerHTML)
-      resultado = numero1 * numero2;
-      display.innerHTML = resultado.toString().substring(0,8)
-      this.agregarOperacion(resultado)
+      if(numero1 == ''){
+        numero1 = Number(display.innerHTML)
+        display.innerHTML = ''
+      }else{
+        if(display.innerHTML == resultado){
+          numero1 = Number(display.innerHTML)
+          numero2 = numero2
+        }else{
+          numero2 = Number(display.innerHTML)
+        }
+        resultado = numero1 * numero2;
+        display.innerHTML = this.validarDisplay(resultado)
+        this.agregarOperacion(resultado)
+      }
     }
   },
   dividir: function(){
-    if(numero1 == ''){
-      accion = "dividir"
-      numero1 = Number(display.innerHTML)
+    if(accion == "inicio"){accion = "dividir"}
+    if(accion != "dividir"){
+      numero1 = resultado
       display.innerHTML = ''
+      accion = "dividir"
     }else{
-      numero2 = Number(display.innerHTML)
-      resultado = numero1 / numero2;
-      display.innerHTML = resultado.toString().substring(0,8)
-      this.agregarOperacion(resultado)
+      if(numero1 == ''){
+        numero1 = Number(display.innerHTML)
+        display.innerHTML = ''
+      }else{
+        if(display.innerHTML == resultado){
+          numero1 = Number(display.innerHTML)
+          numero2 = numero2
+        }else{
+          numero2 = Number(display.innerHTML)
+        }
+        resultado = numero1 / numero2;
+        display.innerHTML = this.validarDisplay(resultado)
+        this.agregarOperacion(resultado)
+      }
     }
   },
   borrar: function(){
     numero1 = 0
     numero2 = 0
-    accion = ''
+    resultado = 0
+    accion = "inicio"
     display.innerHTML = "0"
   },
   positivoNegativo: function(){
@@ -128,17 +183,13 @@ var Calculadora = {
   },
   agregarOperacion: function(resultado){
     Operaciones.operacion.push({numero1: numero1, accion: accion, numero2:numero2, resultado: resultado})
-    numero1 = 0
   },
-  capturarTecla: function(event){
-    var tecla = event.which || event.keyCode
-    var valorTecla = String.fromCharCode(tecla)
-    var cadena = display.innerHTML.toString()
-    if(valorTecla < 10 && cadena.length < 8){
-      if(display.innerHTML == "-0" || display.innerHTML == "0"){
-        display.innerHTML = ""
-      }
-      display.innerHTML += valorTecla
+  validarDisplay: function(cadena){
+    var valor = cadena.toString()
+    if(valor.length > 8){
+      return valor.substring(0,8)
+    }else{
+      return valor
     }
   },
   calcular: function(){
@@ -156,7 +207,7 @@ var Calculadora = {
         Calculadora.dividir()
         break;
       default:
-        alert('No hay na accion para calcular')
+        alert('Seleccione la Operacion a Realizar. Gracias !!')
     }
   }
 }
